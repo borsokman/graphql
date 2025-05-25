@@ -1,0 +1,56 @@
+/* style.css */
+
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+section {
+  width: 100%;
+  margin-top: 20px;
+}
+
+#profile-section {
+  display: none;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#error-message {
+  color: red;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.info,
+.stats {
+  width: 48%;
+}
+
+.info p,
+.stats p {
+  margin: 6px 0;
+}

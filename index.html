@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- LOGIN SECTION -->
+  <section id="login-section">
+    <h2>Login To See Your Stats</h2>
+    <form id="login-form">
+      <label>
+        Email or Username:
+        <input type="text" id="username" required />
+      </label>
+      <label>
+        Password:
+        <input type="password" id="password" required />
+      </label>
+      <button type="submit">Login</button>
+    </form>
+    <p id="error-message"></p>
+  </section>
+
+  <!-- PROFILE SECTION -->
+  <section id="profile-section">
+    <h2>Welcome, <span id="user-login"></span>!</h2>
+    <div class="profile-container">
+      <!-- User Info -->
+      <div class="info">
+        <h3>User's Info</h3>
+        <p><strong>Name:</strong> <span id="info-name"></span></p>
+        <p><strong>Date of Birth:</strong> <span id="info-dob"></span></p>
+        <p><strong>Email:</strong> <span id="info-email"></span></p>
+        <p><strong>Phone:</strong> <span id="info-phone"></span></p>
+        <p><strong>Gender:</strong> <span id="info-gender"></span></p>
+        <p><strong>Nationality:</strong> <span id="info-nationality"></span></p>
+      </div>
+      <!-- Progress Stats -->
+      <div class="stats">
+        <h3>Course Progress</h3>
+        <p><strong>Current Level:</strong> <span id="stat-level"></span></p>
+        <p><strong>Total XP:</strong> <span id="stat-xp"></span></p>
+        <p><strong>Audit Ratio:</strong> <span id="stat-audit"></span></p>
+      </div>
+    </div>
+    <button id="logout-btn">Logout</button>
+  </section>
+
+  <script src="login.js"></script>
+</body>
+</html>
