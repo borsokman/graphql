@@ -24,32 +24,43 @@
     </form>
     <p id="error-message"></p>
   </section>
-
   <!-- PROFILE SECTION -->
   <section id="profile-section">
-    <h2>Welcome, <span id="user-login"></span>!</h2>
+    <h2>Welcome, <span id="welcome-name"></span>!</h2>
     <div class="profile-container">
       <!-- User Info -->
       <div class="info">
-        <h3>User's Info</h3>
-        <p><strong>Name:</strong> <span id="info-name"></span></p>
-        <p><strong>Date of Birth:</strong> <span id="info-dob"></span></p>
+        <h3>User's Information</h3>
+        <p><strong>Campus:</strong> <span id="info-campus"></span></p>
+        <p><strong>ID:</strong> <span id="info-login"></span></p>
+        <p><strong>First Name:</strong> <span id="info-fname"></span></p>
+        <p><strong>Last Name:</strong> <span id="info-lname"></span></p>
         <p><strong>Email:</strong> <span id="info-email"></span></p>
-        <p><strong>Phone:</strong> <span id="info-phone"></span></p>
-        <p><strong>Gender:</strong> <span id="info-gender"></span></p>
-        <p><strong>Nationality:</strong> <span id="info-nationality"></span></p>
       </div>
       <!-- Progress Stats -->
       <div class="stats">
         <h3>Course Progress</h3>
-        <p><strong>Current Level:</strong> <span id="stat-level"></span></p>
         <p><strong>Total XP:</strong> <span id="stat-xp"></span></p>
         <p><strong>Audit Ratio:</strong> <span id="stat-audit"></span></p>
+        <p><strong>Done:</strong> <span id="stat-done"></span></p>
+        <p><strong>Bonus:</strong> <span id="stat-bonus"></span></p>
+        <p><strong>Received:</strong> <span id="stat-received"></span></p>
       </div>
     </div>
+    <!-- Project XP Graph: -->
+    <div class="xp-chart-container">
+      <h3>XP by Project</h3>
+      <svg id="project-xp-graph" width="1000px" height="2500px"></svg>
+    </div>
+     <!-- Exercise XP Graph: -->
+    <div class="xp-chart-container">
+      <h3>XP by Exercise</h3>
+      <svg id="exercise-xp-graph" width="1000px" height="400px"></svg>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
     <button id="logout-btn">Logout</button>
   </section>
-
-  <script src="login.js"></script>
+  <script src="graphQL.js"></script>
 </body>
 </html>

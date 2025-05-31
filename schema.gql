@@ -1,6 +1,0 @@
-const typeDefs = gql'
-type User {
-    id: Int
-    fname: String
-    age: Int
-}   
