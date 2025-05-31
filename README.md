@@ -37,6 +37,3 @@ A simple profile dashboard built with vanilla HTML, CSS, and JavaScript that con
 - Build dynamic SVG charts
 - Improve UI/UX without any frontend frameworks
 - Deploy and host using GitHub Pages
-
-## 📁 Folder Structure
-
