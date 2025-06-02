@@ -32,7 +32,7 @@ form.addEventListener("submit", async (e) => {
 
 async function showProfile(token) {
   const query = `
-  {
+{
   userInfo: user {
     id
     campus
@@ -40,10 +40,12 @@ async function showProfile(token) {
     email
     firstName
     lastName
+    auditRatio
     totalUp
     totalUpBonus
     totalDown
   }
+
   xpTransactions: transaction(
     where: {type: {_eq: "xp"}, _and: [{object: {type: {_neq: "piscine"}}}, {path: {_nlike: "%piscine-js/%"}}, {path: {_nlike: "%checkpoint%"}}]}
     order_by: {createdAt: asc}
@@ -56,14 +58,46 @@ async function showProfile(token) {
     }
     createdAt
   }
-  xpSum: transaction_aggregate(where: {type: {_eq: "xp"}}) {
-    aggregate {
-      sum {
-        amount
-      }
-    }
+
+  xpSum: transaction_aggregate(where: { type: { _eq: "xp" } }) {
+    aggregate { sum { amount } }
   }
-}`;
+
+  xpSchool: transaction_aggregate(
+    where: {
+      _and: [
+        { type: { _eq: "xp" } },
+        { path: { _nlike: "%piscine-go/%" } },
+        { path: { _nlike: "%piscine-js/%" } }
+      ]
+    }
+  ) {
+    aggregate { sum { amount } }
+  }
+
+  xpPiscineGo: transaction_aggregate(
+    where: {
+      _and: [
+        { type: { _eq: "xp" } },
+        { path: { _like: "%piscine-go/%" } }
+      ]
+    }
+  ) {
+    aggregate { sum { amount } }
+  }
+
+  xpPiscineJs: transaction_aggregate(
+    where: {
+      _and: [
+        { type: { _eq: "xp" } },
+        { path: { _like: "%piscine-js/%" } }
+      ]
+    }
+  ) {
+    aggregate { sum { amount } }
+  }
+}
+`;
 
   const res = await fetch(GRAPHQL_ENDPOINT, {
     method: "POST",
@@ -74,13 +108,19 @@ async function showProfile(token) {
     body: JSON.stringify({ query }),
   });
   const { data, errors } = await res.json();
+
+  const totalXP = data.xpSum.aggregate.sum.amount;
+  const schoolXP = data.xpSchool.aggregate.sum.amount;
+  const goXP = data.xpPiscineGo.aggregate.sum.amount;
+  const jsXP = data.xpPiscineJs.aggregate.sum.amount;
+
   if (errors) {
     console.error(errors);
     errMsg.textContent = "Error loading profile.";
     return;
   }
 
-  fillProfile(data);
+  fillProfile(data, totalXP, schoolXP, goXP, jsXP);
   const projectTx = data.xpTransactions.filter(
     (tx) => tx.object.type === "project"
   );
@@ -91,7 +131,7 @@ async function showProfile(token) {
   renderExerciseXpGraph(exerciseTx);
 }
 
-function fillProfile({ userInfo, xpSum }) {
+function fillProfile({ userInfo }, totalXP, schoolXP, goXP, jsXP) {
   const user = userInfo[0];
   document.getElementById(
     "welcome-name"
@@ -101,17 +141,44 @@ function fillProfile({ userInfo, xpSum }) {
   document.getElementById("info-fname").textContent = user.firstName;
   document.getElementById("info-lname").textContent = user.lastName;
   document.getElementById("info-email").textContent = user.email;
-  document.getElementById("stat-xp").textContent =
-    xpSum.aggregate.sum.amount.toLocaleString() + " XP";
-  const totalGiven = user.totalUp + user.totalUpBonus;
+
+  document.getElementById("stat-xp").textContent = `Total: ${formatXP(
+    totalXP,
+    "Total"
+  )}  |  School: ${formatXP(schoolXP, "School")}  |  Piscine Go: ${formatXP(
+    goXP,
+    "Piscine Go"
+  )}  |  Piscine JS: ${formatXP(jsXP, "Piscine JS")}`;
   document.getElementById("stat-audit").textContent =
-    totalGiven.toLocaleString();
-  document.getElementById("stat-done").textContent =
-    user.totalUp.toLocaleString();
+    user.auditRatio.toFixed(1);
+
+  document.getElementById("stat-done").textContent = formatXP(
+    user.totalUp,
+    "Done"
+  );
   document.getElementById("stat-bonus").textContent =
-    user.totalUpBonus.toLocaleString();
-  document.getElementById("stat-received").textContent =
-    user.totalDown.toLocaleString();
+    "+ " + formatXP(user.totalUpBonus, "Bonus");
+  document.getElementById("stat-received").textContent = formatXP(
+    user.totalDown,
+    "Received"
+  );
+}
+
+function formatXP(xp, label) {
+  if (xp >= 1_000_000) {
+    const mb = xp / 1_000_000;
+    if (label === "Received") {
+      return mb.toFixed(2) + " MB"; // round to 2 decimals
+    }
+    return Math.floor(mb * 100) / 100 + " MB"; // truncate to 2 decimals
+  } else if (xp >= 1_000) {
+    const kb = xp / 1_000;
+    if (label === "Bonus") {
+      return kb.toFixed(2) + " kB"; // round for Bonus
+    }
+    return Math.floor(kb) + " kB"; // truncate for others
+  }
+  return xp + " B";
 }
 
 function renderProjectXpGraph(data) {
