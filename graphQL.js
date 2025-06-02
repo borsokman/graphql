@@ -168,15 +168,15 @@ function formatXP(xp, label) {
   if (xp >= 1_000_000) {
     const mb = xp / 1_000_000;
     if (label === "Received") {
-      return mb.toFixed(2) + " MB"; // round to 2 decimals
+      return mb.toFixed(2) + " MB"; // round for Received
     }
-    return Math.floor(mb * 100) / 100 + " MB"; // truncate to 2 decimals
+    return Math.floor(mb * 100) / 100 + " MB"; // truncate for others
   } else if (xp >= 1_000) {
     const kb = xp / 1_000;
     if (label === "Bonus") {
       return kb.toFixed(2) + " kB"; // round for Bonus
     }
-    return Math.floor(kb) + " kB"; // truncate for others
+    return Math.ceil(kb) + " kB"; // round UP for others
   }
   return xp + " B";
 }
