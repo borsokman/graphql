@@ -234,15 +234,6 @@ function renderProjectXpGraph(data) {
   });
 }
 
-(async () => {
-  const token = localStorage.getItem("jwt");
-  if (token) {
-    loginSec.style.display = "none";
-    profSec.style.display = "block";
-    await showProfile(token);
-  }
-})();
-
 function renderExerciseXpGraph(data) {
   // 1) Grab the SVG and clear it
   const svg = document.getElementById("exercise-xp-graph");
@@ -324,6 +315,15 @@ function renderExerciseXpGraph(data) {
     });
   });
 }
+
+(async () => {
+  const token = localStorage.getItem("jwt");
+  if (token) {
+    loginSec.style.display = "none";
+    profSec.style.display = "block";
+    await showProfile(token);
+  }
+})();
 
 const logoutBtn = document.getElementById("logout-btn");
 logoutBtn.addEventListener("click", () => {
